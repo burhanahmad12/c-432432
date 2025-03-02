@@ -86,6 +86,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
+      throw error;
     }
   };
 
