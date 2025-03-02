@@ -2,10 +2,13 @@
 import { Link } from "react-router-dom";
 import ThemeToggle from "@/components/ThemeToggle";
 import UserMenu from "@/components/UserMenu";
-import { Home } from "lucide-react";
+import { Home, User, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
+  const { user } = useAuth();
+  
   return (
     <div className="w-full bg-gradient-to-r from-background to-background-secondary border-b border-primary/10">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -25,13 +28,32 @@ const Header = () => {
             </Link>
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <Link to="/">
               <Button variant="ghost" size="sm" className="flex items-center gap-1">
                 <Home className="h-4 w-4" />
-                <span>Home</span>
+                <span className="hidden sm:inline">Home</span>
               </Button>
             </Link>
+            
+            {user && (
+              <>
+                <Link to="/profile">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                    <User className="h-4 w-4" />
+                    <span className="hidden sm:inline">Profile</span>
+                  </Button>
+                </Link>
+                
+                <Link to="/settings">
+                  <Button variant="ghost" size="sm" className="flex items-center gap-1">
+                    <Settings className="h-4 w-4" />
+                    <span className="hidden sm:inline">Settings</span>
+                  </Button>
+                </Link>
+              </>
+            )}
+            
             <UserMenu />
             <ThemeToggle />
           </div>
