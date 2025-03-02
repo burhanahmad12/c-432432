@@ -1,10 +1,14 @@
 
 import CryptoChart from "@/components/CryptoChart";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Index = () => {
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
+        <div className="flex justify-end mb-4">
+          <ThemeToggle />
+        </div>
         <header className="mb-8 text-center">
           <div className="flex flex-col items-center justify-center">
             <img 

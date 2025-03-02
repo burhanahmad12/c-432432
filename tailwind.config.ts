@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -23,36 +22,30 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#0F172A",
-        "background-secondary": "#1E293B",
-        foreground: "#F1F5F9",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          secondary: "hsl(var(--background-secondary))",
+        },
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#38BDF8",
-          foreground: "#FAFAF8",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#334155",
-          foreground: "#F1F5F9",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         card: {
-          DEFAULT: "#1E293B",
-          foreground: "#F1F5F9",
-        },
-        success: {
-          DEFAULT: "#4ADE80",
-          foreground: "#FAFAF8",
-        },
-        warning: {
-          DEFAULT: "#FB923C",
-          foreground: "#FAFAF8",
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         muted: {
-          DEFAULT: "#64748B",
-          foreground: "#E2E8F0",
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#38BDF8",
-          foreground: "#FAFAF8",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
       },
       borderRadius: {

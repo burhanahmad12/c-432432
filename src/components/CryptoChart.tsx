@@ -1,7 +1,27 @@
 
+import { useEffect, useState } from 'react';
 import TradingViewWidget from 'react-tradingview-widget';
 
 const CryptoChart = () => {
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    setIsDark(isDarkMode);
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDark(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="glass-card p-6 rounded-xl animate-fade-in">
       <div className="flex items-center justify-between mb-6">
@@ -10,13 +30,13 @@ const CryptoChart = () => {
       <div className="h-[70vh] w-full rounded-lg overflow-hidden border border-secondary/50">
         <TradingViewWidget
           symbol="FX:EURUSD"
-          theme="dark"
+          theme={isDark ? "dark" : "light"}
           locale="en"
           autosize
           hide_side_toolbar={true}
           allow_symbol_change={true}
           interval="D"
-          toolbar_bg="#1E293B"
+          toolbar_bg={isDark ? "#1E293B" : "#F8FAFC"}
           enable_publishing={false}
           hide_top_toolbar={false}
           save_image={true}
