@@ -5,7 +5,7 @@ const CryptoChart = () => {
   return (
     <div className="glass-card p-6 rounded-xl animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-primary">Forex Trading Dashboard</h2>
+        <h2 className="text-xl font-semibold text-primary">Forex Trading View Dashboard</h2>
       </div>
       <div className="h-[70vh] w-full rounded-lg overflow-hidden border border-secondary/50">
         <TradingViewWidget
