@@ -3,11 +3,11 @@ import TradingViewWidget from 'react-tradingview-widget';
 
 const CryptoChart = () => {
   return (
-    <div className="glass-card p-6 rounded-lg animate-fade-in">
+    <div className="glass-card p-6 rounded-xl animate-fade-in">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold">Trading View By Cdw Burhan</h2>
+        <h2 className="text-xl font-semibold text-primary">Trading View By Cdw Burhan</h2>
       </div>
-      <div className="h-[600px] w-full">
+      <div className="h-[70vh] w-full rounded-lg overflow-hidden border border-secondary/50">
         <TradingViewWidget
           symbol="FX:EURUSD"
           theme="dark"
@@ -16,7 +16,7 @@ const CryptoChart = () => {
           hide_side_toolbar={true}
           allow_symbol_change={true}
           interval="D"
-          toolbar_bg="#141413"
+          toolbar_bg="#1E293B"
           enable_publishing={false}
           hide_top_toolbar={false}
           save_image={true}

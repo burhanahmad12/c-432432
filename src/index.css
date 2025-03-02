@@ -1,15 +1,16 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-gradient-to-br from-background to-background-secondary text-foreground antialiased min-h-screen;
   }
 }
 
 .glass-card {
-  @apply bg-secondary bg-opacity-20 backdrop-blur-lg border border-white border-opacity-10 shadow-lg;
+  @apply bg-card/30 backdrop-blur-md border border-white/10 shadow-xl rounded-xl;
 }
 
 .crypto-chart {
@@ -27,4 +28,13 @@
 
 .animate-pulse-subtle {
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
 }
