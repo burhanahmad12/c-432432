@@ -9,7 +9,7 @@ const CryptoChart = () => {
       </div>
       <div className="h-[400px] w-full">
         <TradingViewWidget
-          symbol="BINANCE:BTCUSDT"
+          symbol="FX:EURUSD"
           theme="dark"
           locale="en"
           autosize
