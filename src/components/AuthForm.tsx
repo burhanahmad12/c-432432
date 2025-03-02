@@ -29,7 +29,6 @@ export default function AuthForm() {
 
     try {
       if (authType === "signup") {
-        // For signup, we use the metadata to store the username
         const { error } = await supabase.auth.signUp({
           email,
           password,
