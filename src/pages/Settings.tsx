@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,23 +30,41 @@ const Settings = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
+      
+      if (!user?.id) {
+        console.error('No user ID available');
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('username, avatar_url')
-        .eq('id', user?.id)
-        .single();
+        .eq('id', user.id)
+        .maybeSingle();
         
       if (error) {
         console.error('Error fetching profile:', error);
+        toast.error('Failed to load profile data');
         return;
       }
       
       if (data) {
         setUsername(data.username || "");
         setAvatarUrl(data.avatar_url || "");
+      } else {
+        // If no profile exists, create one
+        console.log('No profile found, creating a new one');
+        await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            username: user.email?.split('@')[0] || '',
+            avatar_url: null
+          });
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
+      toast.error('Error loading profile');
     } finally {
       setLoading(false);
     }
@@ -73,27 +92,20 @@ const Settings = () => {
     try {
       setLoading(true);
       
+      if (!user) {
+        toast.error('You must be logged in to update your profile');
+        return;
+      }
+      
       let finalAvatarUrl = avatarUrl;
       
       // Upload avatar if changed
       if (avatarFile) {
         setUploading(true);
         
-        // Create storage bucket if it doesn't exist
-        const { data: bucketData, error: bucketError } = await supabase
-          .storage
-          .getBucket('avatars');
-          
-        if (bucketError && bucketError.message.includes('The resource was not found')) {
-          await supabase.storage.createBucket('avatars', {
-            public: true,
-            fileSizeLimit: 1024 * 1024 * 2 // 2MB
-          });
-        }
-        
         // Upload file
         const fileExt = avatarFile.name.split('.').pop();
-        const fileName = `${user!.id}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        const fileName = `${user.id}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
         
         const { data, error } = await supabase
           .storage
@@ -108,18 +120,33 @@ const Settings = () => {
         } else {
           const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
           finalAvatarUrl = publicUrl;
+          console.log('Avatar uploaded successfully:', finalAvatarUrl);
         }
         
         setUploading(false);
       }
       
       // Update profile
-      await updateProfile({
-        username,
-        avatar_url: finalAvatarUrl
-      });
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          username,
+          avatar_url: finalAvatarUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id);
+      
+      if (error) {
+        throw error;
+      }
       
       toast.success('Profile updated successfully');
+      
+      // Update the avatar URL state with the new URL
+      if (finalAvatarUrl !== avatarUrl) {
+        setAvatarUrl(finalAvatarUrl);
+      }
+      
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Error updating profile');

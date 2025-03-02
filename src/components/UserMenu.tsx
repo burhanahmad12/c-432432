@@ -28,11 +28,13 @@ const UserMenu = () => {
 
   const fetchProfile = async () => {
     try {
+      if (!user?.id) return;
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('username, avatar_url')
-        .eq('id', user?.id)
-        .single();
+        .eq('id', user.id)
+        .maybeSingle();
         
       if (error) {
         console.error('Error fetching profile:', error);

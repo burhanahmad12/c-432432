@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { Pencil, User } from "lucide-react";
 
 const Profile = () => {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -21,28 +21,48 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!authLoading && !user) {
       navigate("/auth");
     } else if (user) {
       fetchUserProfile();
     }
-  }, [user, loading, navigate]);
+  }, [user, authLoading, navigate]);
 
   const fetchUserProfile = async () => {
+    if (!user?.id) return;
+    
     try {
+      setIsLoading(true);
       const { data, error } = await supabase
         .from("profiles")
         .select("username, avatar_url")
-        .eq("id", user?.id)
-        .single();
+        .eq("id", user.id)
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
       
-      setUsername(data.username || "");
-      setAvatarUrl(data.avatar_url || "");
+      if (data) {
+        setUsername(data.username || "");
+        setAvatarUrl(data.avatar_url || "");
+        console.log("Profile data loaded:", data);
+      } else {
+        console.log("No profile found, creating one");
+        // Create a profile if none exists
+        await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            username: user.email?.split('@')[0] || '',
+            avatar_url: null
+          });
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
       toast.error("Failed to load profile data");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,10 +116,13 @@ const Profile = () => {
               <div className="flex flex-col md:flex-row gap-8">
                 <div className="flex flex-col items-center gap-4">
                   <Avatar className="w-32 h-32 border-2 border-primary/20">
-                    <AvatarImage src={avatarUrl} alt={username || "User"} />
-                    <AvatarFallback className="text-4xl">
-                      <User className="h-12 w-12 text-muted-foreground" />
-                    </AvatarFallback>
+                    {avatarUrl ? (
+                      <AvatarImage src={avatarUrl} alt={username || "User"} />
+                    ) : (
+                      <AvatarFallback className="text-4xl bg-gradient-to-br from-primary/90 to-accent/90 text-primary-foreground">
+                        {user?.email?.charAt(0).toUpperCase() || <User className="h-12 w-12" />}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                   
                   {isEditing && (
