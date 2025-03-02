@@ -29,6 +29,7 @@ export default function AuthForm() {
 
     try {
       if (authType === "signup") {
+        // For signup, we use the metadata to store the username
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -59,6 +60,7 @@ export default function AuthForm() {
         navigate("/");
       }
     } catch (error: any) {
+      console.error("Auth error:", error.message);
       toast({
         title: "Error",
         description: error.message,
