@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const UserMenu = () => {
   const { user, signOut } = useAuth();
@@ -70,18 +71,20 @@ const UserMenu = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-primary/30 hover:border-primary/60 transition-all">
-          {avatarUrl ? (
-            <img 
-              src={avatarUrl} 
-              alt="Profile" 
-              className="h-full w-full object-cover" 
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-gradient-to-br from-primary/90 to-accent/90 text-primary-foreground">
-              {user.email?.charAt(0).toUpperCase()}
-            </div>
-          )}
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full overflow-hidden border-2 border-primary/30 hover:border-primary/60 transition-all p-0">
+          <Avatar className="h-full w-full">
+            {avatarUrl ? (
+              <AvatarImage 
+                src={avatarUrl} 
+                alt="Profile"
+                className="object-cover"
+              />
+            ) : (
+              <AvatarFallback className="bg-gradient-to-br from-primary/90 to-accent/90 text-primary-foreground">
+                {user.email?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            )}
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 mr-2 mt-1 bg-card/95 backdrop-blur-sm border border-primary/20 p-2 rounded-xl" align="end" forceMount>
