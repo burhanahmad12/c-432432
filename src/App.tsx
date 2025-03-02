@@ -9,7 +9,7 @@ import Settings from "./pages/Settings";
 
 function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="dark">
       <AuthProvider>
         <Router>
           <Routes>
